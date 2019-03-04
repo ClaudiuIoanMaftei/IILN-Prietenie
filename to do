@@ -1,10 +1,12 @@
 #to do: see if hashtags are relevant
 #to do: attempt semantical labeling of words, not lexical
 
-#(Diana) autocorrect
-#(Claudiu) convert to lemma
-#(Diana) obtain keywords
-#(Mihai) NAG OAG CAG percentile for keywords - not aggressive, covertly, overtly
-#(Diana) emotion label API
-#(Claudiu) upper on lower letter percentile
-#(Claudiu) punctuation marks * and ! and ?
+#(Diana) autocorrect - tot fișierul
+#(Claudiu) convert to lemma - un map [cuvânt] - lemma
+#(Diana) obtain keywords - lista de cuvinte pentru un mesaj
+#(Mihai) NAG OAG CAG percentile for keywords - not aggressive, covertly, overtly - [cuvânt_lematizat] = (scor,scor,scor)
+#(Diana) emotion label API - 
+#(Claudiu) upper on lower letter percentile - real number
+#(Claudiu) punctuation marks * and ! and ? - real number (perhaps number as well as sequencing)
+
+#output-uri in fisiere
