@@ -1,0 +1,10 @@
+#to do: see if hashtags are relevant
+#to do: attempt semantical labeling of words, not lexical
+
+#(Diana) autocorrect
+#(Claudiu) convert to lemma
+#(Diana) obtain keywords
+#(Mihai) NAG OAG CAG percentile for keywords - not aggressive, covertly, overtly
+#(Diana) emotion label API
+#(Claudiu) upper on lower letter percentile
+#(Claudiu) punctuation marks * and ! and ?
