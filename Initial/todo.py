@@ -20,7 +20,7 @@ def read(file):
     text = open(file, "r", encoding="UTF-8").read()
     data = text.split("facebook_corpus_msr_")
     data = [(txt.split(",", 1)[1].strip().rsplit(",", 1)[0].replace("\"","").lower(), txt.split(",", 1)[1].strip().rsplit(",", 1)[1]) for txt in data if txt != ""]
-    punct_mark = ".,!@#$%^&*()[]{}?/:;-\n\""
+    punct_mark = ".,!@#$%^&*()[]{}\\?/:;-\n\""
     for x in data:
         for chr in punct_mark:
             x = (x[0].replace(chr, " "),x[1])
