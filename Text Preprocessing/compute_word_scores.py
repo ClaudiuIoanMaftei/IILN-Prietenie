@@ -2,12 +2,15 @@ import sys, copy
 sys.path.insert(0, '../Initial/')
 from todo import read
 data, dex = read("../Data/agr_en_train.csv")
-fd = open("Outputs/lemmatization.txt", "r", encoding="UTF-8")
+fd = open("Outputs/lemmas.txt", "r", encoding="UTF-8")
 
 lemma_dex = dict()
 line = fd.readline().strip()
 while line:
-    lemma_dex[line.split('    ')[0]] = line.split('    ')[1]
+    try:
+        lemma_dex[line.split('\t')[0]] = line.split('\t')[1]
+    except:
+        pass
     line = fd.readline().strip()
 fd.close()
 

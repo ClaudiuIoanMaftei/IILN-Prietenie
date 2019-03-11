@@ -25,9 +25,9 @@ def read(file):
 
     return data, dex
 
-msg_test_data,dex=read("agr_en_train.csv")
+msg_test_data,dex=read("../Data/agr_en_train.csv")
 print("boop")
-with open("lemmas.txt","w", encoding="UTF-8") as f:
+with open("Outputs/lemmas.txt","w", encoding="UTF-8") as f:
     for word in dex:
         f.write(word)
         f.write('\t')
