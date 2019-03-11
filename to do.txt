@@ -8,5 +8,7 @@
 #(Diana) emotion label API - 
 #(Claudiu) upper on lower letter percentile - real number
 #(Claudiu) punctuation marks * and ! and ? - real number (perhaps number as well as sequencing)
+# use synonyms in order to add to the current scores, and create new words with similar scores (for future classification)
+
 
 #output-uri in fisiere
