@@ -2,13 +2,13 @@
 #to do: attempt semantical labeling of words, not lexical
 
 #(Diana) autocorrect - tot fișierul
-#(Claudiu) convert to lemma - un map [cuvânt] - lemma
+#(x) (Claudiu) convert to lemma - un map [cuvânt] - lemma
 #(Diana) obtain keywords - lista de cuvinte pentru un mesaj
-#(Mihai) NAG CAG OAG percentile for keywords - not aggressive, covertly, overtly - [cuvânt_lematizat] = (scor,scor,scor)
+#(x) (Mihai) NAG CAG OAG percentile for keywords - not aggressive, covertly, overtly - [cuvânt_lematizat] = (scor,scor,scor)
 #(Diana) emotion label API - 
 #(Claudiu) upper on lower letter percentile - real number
 #(Claudiu) punctuation marks * and ! and ? - real number (perhaps number as well as sequencing)
-#(Mihai)use synonyms in order to add to the current scores, and create new words with similar scores (for future classification)
+#(Mihai) use synonyms in order to add to the current scores, and create new words with similar scores (for future classification)
 
 
 #output-uri in fisiere
