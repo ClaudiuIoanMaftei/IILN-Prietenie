@@ -9,20 +9,20 @@ def read(file):
     dex = dict()
     text = open(file, "r", encoding="UTF-8").read()
     data = text.split("facebook_corpus_msr_")
-    data = [(txt.split(",", 1)[1].strip().rsplit(",", 1)[0].replace("\"", "").lower(),
-             txt.split(",", 1)[1].strip().rsplit(",", 1)[1]) for txt in data if txt != ""]
-    punct_mark = ".,!@#$%^&*()[]{}\\?/:;-\n\""
-    for x in data:
-        for chr in punct_mark:
-            x = (x[0].replace(chr, " "), x[1])
-        for word in x[0].split(" "):
-            if word != "":
-                if word in dex:
-                    dex[word] += 1
-                else:
-                    dex[word] = 1
+    # print([txt for txt in data if txt != ""][0])
+    data = [txt.split(",", 1)[1].strip().rsplit(",", 1)[0].replace("\"", "") for txt in data if txt != ""]
+    # punct_mark = ".,!@#$%^&*()[]{}\\?/:;-\n\""
+    # for x in data:
+    #     for chr in punct_mark:
+    #         x = (x[0].replace(chr, " "), x[1])
+    #     for word in x[0].split(" "):
+    #         if word != "":
+    #             if word in dex:
+    #                 dex[word] += 1
+    #             else:
+    #                 dex[word] = 1
 
-    return data, dex
+    return data  #, dex
 
 
 # data, dex = read("../Data/agr_en_train.csv")
@@ -60,17 +60,19 @@ def read(file):
 #     print(fd.read().count("NP"))
 #     for line in fd:
 #         if "NP" in line:
-        # set.add()
+# set.add()
 # with open("dictionary.txt", "w") as fd:
-    # fd.write(json.dumps(dictionary, indent=4))
-    # fd.write(json.dumps(sorted(dictionary.items(), key=lambda kv: kv[1]), indent=4))
-data, dex = read("../Data/agr_en_train.csv")
-reg_exp = r"""NP: {<DT>?<JJ|JJS>*<NN|NNS>}  
-                  {<NNP>+}
-              VB: {<MD>?<V.*><TO>?<V.*>?<IN>*}
-                  """
-test = "Diana Mihai Claudiu are to become the friends"
-for index in range(10):
-    result = TextBlob(data[index][0])
-    rp = nltk.RegexpParser(reg_exp)
-    print(str(rp.parse(result.tags)))
+# fd.write(json.dumps(dictionary, indent=4))
+# fd.write(json.dumps(sorted(dictionary.items(), key=lambda kv: kv[1]), indent=4))
+
+if __name__ == '__main__':
+    data, dex = read("../Data/agr_en_train.csv")
+    reg_exp = r"""NP: {<DT>?<JJ|JJS>*<NN|NNS>}  
+                      {<NNP>+}
+                  VB: {<MD>?<V.*><TO>?<V.*>?<IN>*}
+                      """
+    test = "Diana Mihai Claudiu are to become the friends"
+    for index in range(10):
+        result = TextBlob(data[index][0])
+        rp = nltk.RegexpParser(reg_exp)
+        print(str(rp.parse(result.tags)))
