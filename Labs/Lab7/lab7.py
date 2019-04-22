@@ -50,9 +50,8 @@ def compute_sentiments(text):
 
 data = read(file="agr_en_train.csv")
 fd = open("sentimente.txt", "w+")
-index = 0
-for message in data:
-    polarity, subjectivity, classification, positive, negative = compute_sentiments(message)
-    fd.write(str(index) + ' ' + str(polarity) + ' ' + str(subjectivity) + ' ' + str(classification) + ' ' + str(positive) + ' ' + str(negative) + '\n')
-    index += 1
-    print(index)
+for message_index in range(6000, len(data)):
+    polarity, subjectivity, classification, positive, negative = compute_sentiments(data[message_index])
+    fd.write(str(message_index) + ' ' + str(polarity) + ' ' + str(subjectivity) + ' ' + str(classification) + ' ' + str(positive) + ' ' + str(negative) + '\n')
+    print(str(message_index) + ' ' + str(polarity) + ' ' + str(subjectivity) + ' ' + str(classification) + ' ' + str(positive) + ' ' + str(negative) + '\n')
+    print(message_index)
