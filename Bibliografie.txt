@@ -1,0 +1,24 @@
+Notes:
+- difficult to separate hate speech from other instances of offensive language
+- hate speech = speech that targets disadvantaged groups in a manner that is potentially harmul to them
+- fine-grained labels help with hate speech detection
+- subtle linguistic distinctions can make the difference between hate speech and other offensive language (or even non-hate speech)
+- generic syntactic structure : <intensity> <user intent> <hate targets>
+- neural language models show promise for detecting hate speech
+- logistic regression with L2 and linear SVMs did a better job
+- scikit-learn
+- hate speech: it can be directly send to a person or group of people targeted, it can be espoused to nobody in particular, and it can be used in conversation between people
+- deep learning architecture with multi-task learning
+- 3 neuronal network models
+- MultiCNN, multiple convolution structure with a trainable embedding layer
+- the performance of the neural networks-based systems as well as the other approaches do not seem to differ much
+
+References:
+- Davidson, T., Warmsley, D., Macy, M. and Weber, I. (2017) Automated Hate Speech Detection and the Problem of Offensive Language. Proceedings of ICWSM.
+- Kumar, R., Ojha, A.K., Malmasi, S. and Zampieri, M. (2018) Benchmarking Aggression Identification in Social Media. In Proceedings of the First Workshop on Trolling, Aggression and Cyberbullying
+- Malmasi, S., Zampieri, M. (2018) Challenges in Discriminating Profanity from Hate Speech. Journal of Experimental & Theoretical Artificial Intelligence. Volume 30, Issue 2, pp. 187-202. Taylor & Francis
+- Waseem, Z., Davidson, T., Warmsley, D. and Weber, I. (2017) Understanding Abuse: A Typology of Abusive Language Detection Subtasks. Proceedings of the Abusive Language Online Workshop
+- NLTK Documentation: https://www.nltk.org/index.html
+- Lesk Algorithm: https://en.wikipedia.org/wiki/Lesk_algorithm, http://www.nltk.org/howto/wsd.html
+- Sentiment Analysis: http://www.nltk.org/howto/sentiment.html
+- Data extraction: https://www.nltk.org/book/ch07.html
