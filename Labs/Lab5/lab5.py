@@ -11,6 +11,7 @@ print(result)
 # sinonim = str(res2).split('\'')[1]
 print(res2)
 sinonim = res2.lemmas()
-for lemma in sinonim:
-    print(lemma, lemma.count())
+print([lemma.name() for lemma in sinonim])
+# for lemma in sinonim:
+#     print(lemma.name(), lemma.count())
 # print(sinonim)
