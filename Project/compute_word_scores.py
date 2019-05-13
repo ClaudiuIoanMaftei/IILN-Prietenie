@@ -76,6 +76,15 @@ def compute_word_scores():
     for word in scores:
         fd.write("{},{},{},{}\n".format(word, scores[word][0], scores[word][1], scores[word][2]))
     fd.close()
+    
+    #Compute sentence scores
+    fd = open("Outputs/sentence_scores.csv", "w", encoding="UTF-8")
+    index=0
+    for sentence in [data_label[0] in data]:
+        nag, cag, oag = get_sentence_score(sentence, scores, lemma_dex)
+        fd.write(str(index) +","+ str(nag)+ ","+str(cag)+","+str(oag)+"\n")
+        index+=1
+    fd.close()
 
 
 if __name__ == '__main__':
