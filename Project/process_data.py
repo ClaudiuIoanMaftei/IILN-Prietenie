@@ -6,10 +6,10 @@ from tokens_and_lemmas_module import compute_tokens_and_lemmas
 from upper_lower_module import compute_upper_lower
 
 def process_data():
-    nltk.download('movie_reviews')
-    nltk.download('punkt')
-    nltk.download('averaged_perceptron_tagger')
-    nltk.download('wordnet')
+    # nltk.download('movie_reviews')
+    # nltk.download('punkt')
+    # nltk.download('averaged_perceptron_tagger')
+    # nltk.download('wordnet')
 
     print("compute_tokens_and_lemmas started!")
     compute_tokens_and_lemmas()

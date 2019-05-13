@@ -28,7 +28,7 @@ def get_sentiments_score(text):
 def compute_sentiments():
     data_msg, dex = read(file="Data/agr_en_train.csv")
     data_msg = [data[0] for data in data_msg]
-    fd = open("Outputs/sentimente.txt", "w+")
+    fd = open("Outputs/sentiments.txt", "w+")
     for message_index in range(6000, len(data_msg)):
         polarity, subjectivity, classification, positive, negative = get_sentiments_score(data_msg[message_index])
         fd.write(str(message_index) + ' ' + str(polarity) + ' ' + str(subjectivity) + ' ' + str(classification) + ' ' + str(positive) + ' ' + str(negative) + '\n')

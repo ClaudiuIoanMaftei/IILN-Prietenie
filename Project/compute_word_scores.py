@@ -23,11 +23,14 @@ def get_sentence_score(sentence, scores, lemma_dex):
     nr_words = 0
     for word in processed_sentence.split(' '):
         # todo: logica asta mai poate fi schimbata
-        if word.strip() != "" and word != ' ':
-            nr_words += 1
-            score_NAG += scores[lemma_dex[word]][0]
-            score_CAG += scores[lemma_dex[word]][1]
-            score_OAG += scores[lemma_dex[word]][2]
+        try:
+            if word.strip() != "" and word != ' ':
+                nr_words += 1
+                score_NAG += scores[lemma_dex[word]][0]
+                score_CAG += scores[lemma_dex[word]][1]
+                score_OAG += scores[lemma_dex[word]][2]
+        except:
+            pass
     return score_NAG/nr_words, score_CAG/nr_words, score_OAG/nr_words
 
 
