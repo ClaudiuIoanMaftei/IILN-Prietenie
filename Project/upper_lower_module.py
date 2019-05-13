@@ -19,7 +19,7 @@ def read(file):
 def compute_upper_lower():
     data_msg, dex = read(file="Data/agr_en_train.csv")
     data_msg = [data[0] for data in data_msg]
-    fd = open("Outputs/upper.csv", "w+")
+    fd = open("Outputs/upper_lower.csv", "w+")
     for message_index in range(0, len(data_msg)):
         score = get_upper_lower_score(data_msg[message_index])
         fd.write(str(message_index) + ',' + str(score) + '\n')
