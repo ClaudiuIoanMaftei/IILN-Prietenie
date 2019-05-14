@@ -1,4 +1,4 @@
-from tokens_and_lemmas_module import read
+from reading_functions import read_data, read_lemmas
 from nltk.wsd import lesk
 import copy
 
@@ -31,21 +31,22 @@ def get_sentence_score(sentence, scores, lemma_dex):
                 score_OAG += scores[lemma_dex[word]][2]
         except:
             pass
-    return score_NAG/nr_words, score_CAG/nr_words, score_OAG/nr_words
+    return score_NAG / nr_words, score_CAG / nr_words, score_OAG / nr_words
 
 
-def compute_word_scores():
-    data, dex = read("Data/agr_en_train.csv")
-    fd = open("Outputs/lemmas.csv", "r", encoding="UTF-8")
-
-    lemma_dex = dict()
-    line = fd.readline().strip()
-    while line:
-        if line.split(',')[1] != '':
-            lemma_dex[line.split(',')[0]] = line.split(',')[1]
-        line = fd.readline().strip()
+def compute_sentence_scores(data, scores, lemma_dex, output_sentence_score):
+    fd = open(output_sentence_score, "w", encoding="UTF-8")
+    index = 0
+    for sentence in [data_label[0] for data_label in data]:
+        nag, cag, oag = get_sentence_score(sentence, scores, lemma_dex)
+        fd.write(str(index) + "," + str(nag) + "," + str(cag) + "," + str(oag) + "\n")
+        index += 1
     fd.close()
 
+
+def compute_word_scores(input_data, input_lemmas, output_word_scores):
+    data, dex = read_data(input_data)
+    lemma_dex = read_lemmas(file_name=input_lemmas)
     scores = dict()
     for word in set(lemma_dex.values()):
         scores[word] = [0] * 3
@@ -71,24 +72,18 @@ def compute_word_scores():
 
     for word in scores:
         absolute_scores = copy.copy(scores[word])
-        scores[word][0] = scores[word][0] / sum(absolute_scores)
-        scores[word][1] = scores[word][1] / sum(absolute_scores)
-        scores[word][2] = scores[word][2] / sum(absolute_scores)
+        try:
+            scores[word][0] = scores[word][0] / sum(absolute_scores)
+            scores[word][1] = scores[word][1] / sum(absolute_scores)
+            scores[word][2] = scores[word][2] / sum(absolute_scores)
+        except:
+            pass
 
-    fd = open("Outputs/word_scores.csv", "w", encoding="UTF-8")
+    fd = open(output_word_scores, "w", encoding="UTF-8")
     for word in scores:
         fd.write("{},{},{},{}\n".format(word, scores[word][0], scores[word][1], scores[word][2]))
-    fd.close()
-    
-    #Compute sentence scores
-    fd = open("Outputs/sentence_scores.csv", "w", encoding="UTF-8")
-    index=0
-    for sentence in [data_label[0] in data]:
-        nag, cag, oag = get_sentence_score(sentence, scores, lemma_dex)
-        fd.write(str(index) +","+ str(nag)+ ","+str(cag)+","+str(oag)+"\n")
-        index+=1
     fd.close()
 
 
 if __name__ == '__main__':
-    compute_word_scores()
+    compute_word_scores(input_data="Data/agr_en_train.csv", input_lemmas="Outputs/lemmas.csv", output_word_scores="Outputs/word_scores.csv")

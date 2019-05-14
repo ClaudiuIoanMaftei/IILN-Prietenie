@@ -16,25 +16,26 @@ def read(file):
 
     return data, dex
 
-def compute_upper_lower():
-    data_msg, dex = read(file="Data/agr_en_train.csv")
+
+def get_upper_lower_score(sentence):
+    total = 0
+    upper = 0
+    for char in sentence:
+        if char.isalpha():
+            total += 1
+            if char.isupper(): upper += 1
+    if total != 0: return upper / total
+    return 0
+
+
+def compute_upper_lower(input_data, output_data):
+    data_msg, dex = read(file=input_data)
     data_msg = [data[0] for data in data_msg]
-    fd = open("Outputs/upper_lower.csv", "w+")
+    fd = open(output_data, "w+")
     for message_index in range(0, len(data_msg)):
         score = get_upper_lower_score(data_msg[message_index])
         fd.write(str(message_index) + ',' + str(score) + '\n')
 
 
-def get_upper_lower_score(sentence):
-    total=0
-    upper=0
-    for char in sentence:
-        if char.isalpha():
-            total+=1
-            if char.isupper(): upper+=1
-    if total!=0: return upper/total
-    return 0
-
-
 if __name__ == '__main__':
-    compute_upper_lower()
+    compute_upper_lower(input_data="Data/agr_en_dev.csv", output_data="Outputs/upper_lower_train.csv")
