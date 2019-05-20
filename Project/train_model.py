@@ -3,6 +3,7 @@ import keras, os
 from keras.models import load_model
 from keras.layers import Dropout, Dense
 from reading_functions import *
+from sklearn.metrics import f1_score, accuracy_score, recall_score
 
 
 def extract_scores(file, test_data):
@@ -48,7 +49,7 @@ def initialize_model(input_size):
     model.add(Dropout(0.25))
     model.add(Dense(10, activation="sigmoid"))
     model.add(Dense(3, activation="softmax"))
-    model.compile(optimizer=keras.optimizers.Adam(lr=0.01), loss="categorical_crossentropy", metrics=["accuracy"])
+    model.compile(optimizer=keras.optimizers.Adam(lr=0.01), loss="categorical_crossentropy", metrics=["f1"])
     return model
 
 
@@ -65,14 +66,23 @@ def neural_network(input_size, train_data, train_labels, test_data, test_labels)
     model.save('Model/network.h5')
 
 
-def evaluate_neural_network(input_size, test_data, test_labels):
+def evaluate_neural_network(test_data, test_labels):
     model = load_model('Model/network.h5')
-    loss, acc = model.evaluate(test_data, test_labels, verbose=False)
-    print("testare:     loss: ", loss, "acc: ", acc)
+    y_true = list()
+    y_pred = list()
+    for data, label in zip(test_data, test_labels):
+        predicted_label = model.predict(np.array([data]))
+        y_pred.append(np.where(predicted_label[0] == max(predicted_label[0]))[0])
+        y_true.append(np.where(label == max(label))[0])
+    f1 = f1_score(y_true, y_pred, average=None)
+    acc = accuracy_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred, average=None)
+    return f1, acc, recall
 
 
 if __name__ == '__main__':
     train_data, train_labels = extract_scores(file="Data/agr_en_train.csv", test_data=False)
     test_data, test_labels = extract_scores(file="Data/agr_en_dev.csv", test_data=True)
-    neural_network(input_size=7, train_data=train_data, train_labels=train_labels, test_data=test_data, test_labels=test_labels)
-    evaluate_neural_network(input_size=7, test_data=test_data, test_labels=test_labels)
+    # neural_network(input_size=7, train_data=train_data, train_labels=train_labels, test_data=test_data, test_labels=test_labels)
+    f1, acc, recall = evaluate_neural_network(test_data=test_data, test_labels=test_labels)
+    print("F1: {}\nAcc: {}\nRecall: {}\n".format(f1, acc, recall))
