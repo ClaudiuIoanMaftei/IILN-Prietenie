@@ -1,5 +1,5 @@
 import numpy as np
-import keras, os
+import keras
 from keras.models import load_model
 from keras.layers import Dropout, Dense
 from reading_functions import *
@@ -44,12 +44,12 @@ def extract_scores(file, test_data):
 def initialize_model(input_size):
     model = keras.models.Sequential()
     model.add(Dense(input_size, activation="sigmoid"))
-    # model.add(Dropout(0.25))
-    # model.add(Dense(30, activation="sigmoid"))
+    model.add(Dropout(0.25))
+    model.add(Dense(30, activation="sigmoid"))
     model.add(Dropout(0.25))
     model.add(Dense(10, activation="sigmoid"))
     model.add(Dense(3, activation="softmax"))
-    model.compile(optimizer=keras.optimizers.Adam(lr=0.01), loss="categorical_crossentropy", metrics=["f1"])
+    model.compile(optimizer=keras.optimizers.Adam(lr=0.01), loss="categorical_crossentropy", metrics=["accuracy"])
     return model
 
 
@@ -59,7 +59,7 @@ def neural_network(input_size, train_data, train_labels, test_data, test_labels)
     while acc < 0.57:
         print("Trial: ", trial)
         model = initialize_model(input_size)
-        model.fit(x=train_data, y=train_labels, epochs=10+trial, batch_size=120, verbose=False)
+        model.fit(x=train_data, y=train_labels, epochs=trial, batch_size=120, verbose=False)
         loss, acc = model.evaluate(test_data, test_labels, verbose=False)
         print("Acc:", acc)
         trial += 1
@@ -83,6 +83,6 @@ def evaluate_neural_network(test_data, test_labels):
 if __name__ == '__main__':
     train_data, train_labels = extract_scores(file="Data/agr_en_train.csv", test_data=False)
     test_data, test_labels = extract_scores(file="Data/agr_en_dev.csv", test_data=True)
-    # neural_network(input_size=7, train_data=train_data, train_labels=train_labels, test_data=test_data, test_labels=test_labels)
+    neural_network(input_size=7, train_data=train_data, train_labels=train_labels, test_data=test_data, test_labels=test_labels)
     f1, acc, recall = evaluate_neural_network(test_data=test_data, test_labels=test_labels)
     print("F1: {}\nAcc: {}\nRecall: {}\n".format(f1, acc, recall))
