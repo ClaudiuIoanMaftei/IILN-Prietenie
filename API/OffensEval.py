@@ -4,6 +4,8 @@ import zipfile
 from flask import Flask, request, Response, redirect, url_for, render_template, send_file
 from werkzeug.utils import secure_filename
 from API.scripts.tokens_and_lemmas_module import compute_tokens_and_lemmas
+from API.scripts.punctuation_module import compute_punctuation
+from API.scripts.upper_lower_module import compute_upper_lower
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
@@ -56,10 +58,22 @@ def render_punctuation():
 
 @app.route('/get_punctuation_scores', methods=['GET', 'POST'])
 def get_punctuation():
-    if request.method == 'POST':
+    if request.method == "POST":
         f = request.files['file']
         if f and allowed_file(f.filename):
-            return Response('Not finished'), 200
+            filename = secure_filename(f.filename)
+            if not os.path.exists(app.config['UPLOAD_FOLDER'] + request.remote_addr):
+                os.mkdir(app.config['UPLOAD_FOLDER'] + request.remote_addr)
+            path = app.config['UPLOAD_FOLDER'] + request.remote_addr
+            f.save(path + "/" + filename)
+            try:
+                compute_punctuation(path + "/" + filename, path + "/result_punctuation.csv")
+            except Exception:
+                os.remove(path + "/" + filename)
+                return "File does not have required structure", 400
+            os.remove(path + "/" + filename)
+            return send_file(path + "/result_punctuation.csv", mimetype="text/csv",
+                             attachment_filename='result_punctuation.csv', as_attachment=True), 200
     return redirect(url_for('render_punctuation'))
 
 
@@ -115,10 +129,22 @@ def render_upper_lower_scores():
 
 @app.route('/get_upper_lower_scores', methods=['GET', 'POST'])
 def get_upper_lower():
-    if request.method == 'POST':
+    if request.method == "POST":
         f = request.files['file']
         if f and allowed_file(f.filename):
-            return Response('Not finished'), 200
+            filename = secure_filename(f.filename)
+            if not os.path.exists(app.config['UPLOAD_FOLDER'] + request.remote_addr):
+                os.mkdir(app.config['UPLOAD_FOLDER'] + request.remote_addr)
+            path = app.config['UPLOAD_FOLDER'] + request.remote_addr
+            f.save(path + "/" + filename)
+            try:
+                compute_upper_lower(path + "/" + filename, path + "/result_upper_lower_scores.csv")
+            except Exception:
+                os.remove(path + "/" + filename)
+                return "File does not have required structure", 400
+            os.remove(path + "/" + filename)
+            return send_file(path + "/result_upper_lower_scores.csv", mimetype="text/csv",
+                             attachment_filename='result_upper_lower_scores.csv', as_attachment=True), 200
     return redirect(url_for('render_upper_lower_scores'))
 
 
