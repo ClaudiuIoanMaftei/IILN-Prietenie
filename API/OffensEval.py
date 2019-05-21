@@ -1,6 +1,7 @@
 import argparse
 import os
-from flask import Flask, request, Response, redirect, url_for, render_template
+import zipfile
+from flask import Flask, request, Response, redirect, url_for, render_template, send_file
 from werkzeug.utils import secure_filename
 from API.scripts.tokens_and_lemmas_module import compute_tokens_and_lemmas
 
@@ -91,10 +92,19 @@ def get_tokens_lemmas():
                 os.mkdir(app.config['UPLOAD_FOLDER'] + request.remote_addr)
             path = app.config['UPLOAD_FOLDER'] + request.remote_addr
             f.save(path + "/" + filename)
-            # file was saved successfully
-            # check if file has right structure
-            compute_tokens_and_lemmas(path + "/" + filename, path + "/result_tokens.csv", path + "/result_lemmas.csv")
-            return Response('file uploaded successfully'), 200
+            try:
+                compute_tokens_and_lemmas(path + "/" + filename, path + "/result_tokens.csv",
+                                          path + "/result_lemmas.csv")
+            except Exception:
+                os.remove(path + "/" + filename)
+                return "File does not have required structure", 400
+            with zipfile.ZipFile(path + '/tokens_lemmas_results.zip', 'w') as myzip:
+                myzip.write(path + "/result_tokens.csv", "result_tokens.csv")
+                myzip.write(path + "/result_lemmas.csv", "result_lemmas.csv")
+            os.remove(path + "/" + filename)
+            os.remove(path + "/result_tokens.csv")
+            os.remove(path + "/result_lemmas.csv")
+            return send_file(path + "/tokens_lemmas_results.zip"), 200
     return redirect(url_for('render_tokens_lemmas'))
 
 
@@ -127,4 +137,4 @@ if __name__ == '__main__':
         help='Value of the host used by OffensEval.'
     )
     args = parser.parse_args()
-    app.run(host=args.host, port=args.port, threaded=True)
+    app.run(host=args.host, port=args.port, threaded=True, debug=True)
