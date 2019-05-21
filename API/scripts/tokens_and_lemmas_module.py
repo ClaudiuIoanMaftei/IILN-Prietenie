@@ -1,6 +1,7 @@
 import nltk
 from nltk.stem import WordNetLemmatizer
-from API.Scripts.reading_functions import read_data
+from API.scripts.reading_functions import read_data
+
 
 def compute_tokens_and_lemmas(input_file, output_token_file, output_lemmas_file):
     wordnet_lemmatizer = WordNetLemmatizer()

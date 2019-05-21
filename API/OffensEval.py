@@ -1,8 +1,8 @@
 import argparse
 import os
-from flask import Flask, request, Response, flash, redirect, url_for, render_template
+from flask import Flask, request, Response, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
-
+from API.scripts.tokens_and_lemmas_module import compute_tokens_and_lemmas
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
@@ -14,6 +14,11 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@app.route('/')
+def render_main():
+    return render_template('main.html')
+
+
 @app.route('/word_scores')
 def render_word_scores():
     return render_template('word_scores.html')
@@ -21,28 +26,26 @@ def render_word_scores():
 
 @app.route('/get_word_scores', methods=['GET', 'POST'])
 def get_word_scores():
-    return
+    if request.method == 'POST':
+        f = request.files['file']
+        if f and allowed_file(f.filename):
+            return Response('Not finished'), 200
+    return redirect(url_for('render_word_scores'))
 
 
-# @app.route('/prediction')
-# def render_prediction():
-#     return render_template('prediction.html')
-#
-#
-# @app.route('/get_prediction', methods=['GET', 'POST'])
-# def get_prediction():
-#     # train the model and then get prediction
-#     return
-#
-#
-# @app.route('/data_processing')
-# def render_data_processing():
-#     return render_template('data_processing.html')
-#
-#
-# @app.route('/get_data_processing', methods=['GET', 'POST'])
-# def get_processed_data():
-#     return
+@app.route('/prediction')
+def render_prediction():
+    return render_template('prediction.html')
+
+
+@app.route('/get_prediction', methods=['GET', 'POST'])
+def get_prediction():
+    # get prediction from existing model
+    if request.method == 'POST':
+        f = request.files['file']
+        if f and allowed_file(f.filename):
+            return Response('Not finished'), 200
+    return redirect(url_for('render_prediction'))
 
 
 @app.route('/punctuation_scores')
@@ -52,7 +55,11 @@ def render_punctuation():
 
 @app.route('/get_punctuation_scores', methods=['GET', 'POST'])
 def get_punctuation():
-    return
+    if request.method == 'POST':
+        f = request.files['file']
+        if f and allowed_file(f.filename):
+            return Response('Not finished'), 200
+    return redirect(url_for('render_punctuation'))
 
 
 @app.route('/sentiment_scores')
@@ -62,7 +69,11 @@ def render_sentiments():
 
 @app.route('/get_sentiments_scores', methods=['GET', 'POST'])
 def get_sentiments():
-    return
+    if request.method == 'POST':
+        f = request.files['file']
+        if f and allowed_file(f.filename):
+            return Response('Not finished'), 200
+    return redirect(url_for('render_sentiments'))
 
 
 @app.route('/tokens_lemmas')
@@ -76,10 +87,15 @@ def get_tokens_lemmas():
         f = request.files['file']
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
-            if not os.path.exists(app.config['UPLOAD_FOLDER']+request.remote_addr):
-                os.mkdir(app.config['UPLOAD_FOLDER']+request.remote_addr)
-            f.save(app.config['UPLOAD_FOLDER']+request.remote_addr+"/"+filename)
+            if not os.path.exists(app.config['UPLOAD_FOLDER'] + request.remote_addr):
+                os.mkdir(app.config['UPLOAD_FOLDER'] + request.remote_addr)
+            path = app.config['UPLOAD_FOLDER'] + request.remote_addr
+            f.save(path + "/" + filename)
+            # file was saved successfully
+            # check if file has right structure
+            compute_tokens_and_lemmas(path + "/" + filename, path + "/result_tokens.csv", path + "/result_lemmas.csv")
             return Response('file uploaded successfully'), 200
+    return redirect(url_for('render_tokens_lemmas'))
 
 
 @app.route('/upper_lower_scores')
@@ -89,7 +105,11 @@ def render_upper_lower_scores():
 
 @app.route('/get_upper_lower_scores', methods=['GET', 'POST'])
 def get_upper_lower():
-    return
+    if request.method == 'POST':
+        f = request.files['file']
+        if f and allowed_file(f.filename):
+            return Response('Not finished'), 200
+    return redirect(url_for('render_upper_lower_scores'))
 
 
 if __name__ == '__main__':

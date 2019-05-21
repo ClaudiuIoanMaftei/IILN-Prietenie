@@ -24,7 +24,7 @@ if __name__ == '__main__':
         upper_lower_score = get_upper_lower_score(sentence=sentence)
         inputs.append([score_NAG, score_CAG, score_OAG, polarity, subjectivity, punctuation_score, upper_lower_score])
 
-    model = load_model('Model/network.h5')
+    model = load_model('model/network.h5')
     inputs = np.array(inputs)
     outputs = model.predict(inputs)
     for output, sentence in zip(outputs, sentences):
