@@ -5,7 +5,8 @@
     <title>Sentiment Scores</title>
 </head>
 <body>
-    <form action = "http://localhost:5000/get_sentiment_scores" method = "POST"
+    <p>Warning! Computing the sentiments takes a long time! (Approx. 20 messages/minute)</p>
+    <form action = "http://localhost:5000/get_sentiments_scores" method = "POST"
          enctype = "multipart/form-data">
          <input type = "file" name = "file" />
          <input type = "submit"/>

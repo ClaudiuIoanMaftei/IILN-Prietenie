@@ -1,4 +1,4 @@
-from API.Scripts.reading_functions import read_data, read_lemmas
+from API.scripts.reading_functions import read_data, read_lemmas
 from nltk.wsd import lesk
 import copy
 
@@ -86,4 +86,5 @@ def compute_word_scores(input_data, input_lemmas, output_word_scores):
 
 
 if __name__ == '__main__':
-    compute_word_scores(input_data="Data/agr_en_train.csv", input_lemmas="Outputs/lemmas.csv", output_word_scores="Outputs/word_scores.csv")
+    compute_word_scores(input_data="Data/agr_en_train.csv", input_lemmas="Outputs/lemmas.csv",
+                        output_word_scores="Outputs/word_scores.csv")

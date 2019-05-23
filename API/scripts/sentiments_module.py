@@ -1,6 +1,6 @@
 from textblob import TextBlob
 from textblob.sentiments import NaiveBayesAnalyzer
-from API.Scripts.reading_functions import read_data
+from API.scripts.reading_functions import read_data
 
 
 def get_sentiments_score(text):
@@ -21,12 +21,15 @@ def get_sentiments_score(text):
 def compute_sentiments(input_data, output_data):
     data_msg, dex = read_data(file=input_data)
     data_msg = [data[0] for data in data_msg]
-    for message_index in range(2160, len(data_msg)):
+    for message_index in range(len(data_msg)):
         fd = open(output_data, "a")
         polarity, subjectivity, classification, positive, negative = get_sentiments_score(data_msg[message_index])
-        fd.write(str(message_index) + ',' + str(polarity) + ',' + str(subjectivity) + ',' + str(classification) + ',' + str(positive) + ',' + str(negative) + '\n')
+        fd.write(
+            str(message_index) + ',' + str(polarity) + ',' + str(subjectivity) + ',' + str(classification) + ',' + str(
+                positive) + ',' + str(negative) + '\n')
         print(message_index)
         fd.close()
+
 
 if __name__ == '__main__':
     compute_sentiments(input_data="Data/agr_en_dev.csv", output_data="Outputs/sentiments_train.csv")

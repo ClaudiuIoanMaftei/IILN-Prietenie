@@ -6,6 +6,8 @@ from werkzeug.utils import secure_filename
 from API.scripts.tokens_and_lemmas_module import compute_tokens_and_lemmas
 from API.scripts.punctuation_module import compute_punctuation
 from API.scripts.upper_lower_module import compute_upper_lower
+from API.scripts.sentiments_module import compute_sentiments
+from API.scripts.compute_word_scores import compute_word_scores
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
@@ -30,9 +32,30 @@ def render_word_scores():
 @app.route('/get_word_scores', methods=['GET', 'POST'])
 def get_word_scores():
     if request.method == 'POST':
-        f = request.files['file']
-        if f and allowed_file(f.filename):
-            return Response('Not finished'), 200
+        f = request.files.getlist('file')
+        if len(f) == 2:
+            if allowed_file(f[0].filename) and allowed_file(f[1].filename):
+                if not os.path.exists(app.config['UPLOAD_FOLDER'] + request.remote_addr):
+                    os.mkdir(app.config['UPLOAD_FOLDER'] + request.remote_addr)
+                path = app.config['UPLOAD_FOLDER'] + request.remote_addr
+                secured_filenames = []
+                for file in f:
+                    filename = secure_filename(file.filename)
+                    secured_filenames.append(filename)
+                    file.save(path + "/" + filename)
+                try:
+                    compute_word_scores(path + "/" + secured_filenames[0], path + "/" + secured_filenames[1],
+                                        path + "/result_words.csv")
+                except Exception:
+                    os.remove(path + "/" + secured_filenames[0])
+                    os.remove(path + "/" + secured_filenames[1])
+                    return Response("File does not have required structure"), 400
+                os.remove(path + "/" + secured_filenames[0])
+                os.remove(path + "/" + secured_filenames[1])
+                return send_file(path + "/result_words.csv", mimetype="text/csv",
+                                 attachment_filename='result_words.csv', as_attachment=True), 200
+            return Response('Only .csv files are allowed.'), 400
+        return Response('Two files are required'), 400
     return redirect(url_for('render_word_scores'))
 
 
@@ -70,7 +93,7 @@ def get_punctuation():
                 compute_punctuation(path + "/" + filename, path + "/result_punctuation.csv")
             except Exception:
                 os.remove(path + "/" + filename)
-                return "File does not have required structure", 400
+                return Response("File does not have required structure"), 400
             os.remove(path + "/" + filename)
             return send_file(path + "/result_punctuation.csv", mimetype="text/csv",
                              attachment_filename='result_punctuation.csv', as_attachment=True), 200
@@ -87,7 +110,19 @@ def get_sentiments():
     if request.method == 'POST':
         f = request.files['file']
         if f and allowed_file(f.filename):
-            return Response('Not finished'), 200
+            filename = secure_filename(f.filename)
+            if not os.path.exists(app.config['UPLOAD_FOLDER'] + request.remote_addr):
+                os.mkdir(app.config['UPLOAD_FOLDER'] + request.remote_addr)
+            path = app.config['UPLOAD_FOLDER'] + request.remote_addr
+            f.save(path + "/" + filename)
+            try:
+                compute_sentiments(path + "/" + filename, path + "/result_sentiments.csv")
+            except Exception:
+                os.remove(path + "/" + filename)
+                return "File does not have required structure", 400
+            os.remove(path + "/" + filename)
+            return send_file(path + "/result_sentiments.csv", mimetype="text/csv",
+                             attachment_filename='result_sentiments.csv', as_attachment=True), 200
     return redirect(url_for('render_sentiments'))
 
 

@@ -1,18 +1,25 @@
-from API.Scripts.sentiments_module import get_sentiments_score
-from API.Scripts.compute_word_scores import get_sentence_score
-from API.Scripts.reading_functions import read_lemmas, read_word_scores
-from API.Scripts.punctuation_module import get_punctuation_score
-from API.Scripts.upper_lower_module import get_upper_lower_score
+from API.scripts.sentiments_module import get_sentiments_score
+from API.scripts.compute_word_scores import get_sentence_score
+from API.scripts.reading_functions import read_lemmas, read_word_scores
+from API.scripts.punctuation_module import get_punctuation_score
+from API.scripts.upper_lower_module import get_upper_lower_score
 from keras.models import load_model
 import numpy as np
 
+
+def compute_prediction(input_data, output_data):
+
+    return
+
+
 if __name__ == '__main__':
     sentences = ["We have to kill all the Palestinians unless they are resigned to live here as slaves.",
-    "The Palestinians are beasts walking on two legs.",
-    "We have to kill all the Palestinians unless they are resigned to live here as slaves.",
-    "Now that Trump is president, I'm going to shoot you and all the blacks I can find.","Fucking faggots!",
-     "You shit Jew, I'm going to kill you,", "Wipe out the Jews.", "Women are like grass, they need to be beaten/cut regularly."]
-
+                 "The Palestinians are beasts walking on two legs.",
+                 "We have to kill all the Palestinians unless they are resigned to live here as slaves.",
+                 "Now that Trump is president, I'm going to shoot you and all the blacks I can find.",
+                 "Fucking faggots!",
+                 "You shit Jew, I'm going to kill you,", "Wipe out the Jews.",
+                 "Women are like grass, they need to be beaten/cut regularly."]
 
     word_scores = read_word_scores(file_name="Outputs/word_scores.csv")
     lemma_dex = read_lemmas(file_name="Outputs/lemmas.csv")
