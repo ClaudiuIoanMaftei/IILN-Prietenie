@@ -2,7 +2,8 @@ def read_data(file):
     dex = dict()
     text = open(file, "r", encoding="UTF-8").read()
     data = text.split("facebook_corpus_msr_")
-    data = [(txt.split(",", 1)[1].strip().rsplit(",", 1)[0].replace("\"", "").lower(), txt.split(",", 1)[1].strip().rsplit(",", 1)[1]) for txt in data if txt != ""]
+    data = [(txt.split(",", 1)[1].strip().rsplit(",", 1)[0].replace("\"", "").lower(),
+             txt.split(",", 1)[1].strip().rsplit(",", 1)[1]) for txt in data if txt != ""]
     punct_mark = ".,!@#$%^&*()[]{}?/:;-\n\""
     for x in data:
         for chr in punct_mark:
@@ -21,7 +22,8 @@ def read_word_scores(file_name):
     word_scores = dict()
     line = file.readline().strip()
     while line:
-        word, score_NAG, score_CAG, score_OAG = line.split(',')[0], float(line.split(',')[1]), float(line.split(',')[2]), float(line.split(',')[3])
+        word, score_NAG, score_CAG, score_OAG = line.split(',')[0], float(line.split(',')[1]), float(
+            line.split(',')[2]), float(line.split(',')[3])
         word_scores[word] = [score_NAG, score_CAG, score_OAG]
         line = file.readline().strip()
     file.close()
@@ -66,8 +68,10 @@ def read_sentiments(file_name):
     sentiments = dict()
     line = file.readline().strip()
     while line:
-        index, polarity, subjectivity, classification, positive, negative = int(line.split(',')[0]), float(line.split(',')[1]), float(line.split(',')[2]), \
-                                                                            line.split(',')[3], float(line.split(',')[4]), float(line.split(',')[5])
+        index, polarity, subjectivity, classification, positive, negative = int(line.split(',')[0]), float(
+            line.split(',')[1]), float(line.split(',')[2]), \
+                                                                            line.split(',')[3], float(
+            line.split(',')[4]), float(line.split(',')[5])
         sentiments[index] = [polarity, subjectivity, classification, positive, negative]
         line = file.readline().strip()
     file.close()
@@ -79,8 +83,15 @@ def read_sentence_scores(file_name):
     sentence_scores = dict()
     line = file.readline().strip()
     while line:
-        index, score_NAG, score_CAG, score_OAG = int(line.split(',')[0]), float(line.split(',')[1]), float(line.split(',')[2]), float(line.split(',')[3])
+        index, score_NAG, score_CAG, score_OAG = int(line.split(',')[0]), float(line.split(',')[1]), float(
+            line.split(',')[2]), float(line.split(',')[3])
         sentence_scores[index] = [score_NAG, score_CAG, score_OAG]
         line = file.readline().strip()
     file.close()
     return sentence_scores
+
+
+if __name__ == '__main__':
+    a, b = read_data("../test/input.txt")
+    print(a)
+    print(b)

@@ -8,6 +8,7 @@ from API.scripts.punctuation_module import compute_punctuation
 from API.scripts.upper_lower_module import compute_upper_lower
 from API.scripts.sentiments_module import compute_sentiments
 from API.scripts.compute_word_scores import compute_word_scores
+from API.scripts.model_prediction import compute_prediction
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
@@ -68,9 +69,7 @@ def render_prediction():
 def get_prediction():
     # get prediction from existing model
     if request.method == 'POST':
-        f = request.files['file']
-        if f and allowed_file(f.filename):
-            return Response('Not finished'), 200
+        return
     return redirect(url_for('render_prediction'))
 
 
