@@ -1,9 +1,16 @@
 def read_data(file):
     dex = dict()
-    text = open(file, "r", encoding="UTF-8").read()
-    data = text.split("facebook_corpus_msr_")
-    data = [(txt.split(",", 1)[1].strip().rsplit(",", 1)[0].replace("\"", "").lower(),
-             txt.split(",", 1)[1].strip().rsplit(",", 1)[1]) for txt in data if txt != ""]
+    data = list()
+    with open(file, "r") as fd:
+        for line in fd:
+            splitted_line = line.strip().split(',')
+            # id = splitted_line[0]
+            tag = splitted_line[-1]
+            message = ""
+            for sequence in range(1, len(splitted_line) - 1):
+                message += splitted_line[sequence] + ","
+            message = message[:-1]
+            data.append((message, tag))
     punct_mark = ".,!@#$%^&*()[]{}?/:;-\n\""
     for x in data:
         for chr in punct_mark:

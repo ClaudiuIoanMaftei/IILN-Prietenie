@@ -12,7 +12,7 @@ from API.scripts.model_prediction import compute_prediction
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
-ALLOWED_EXTENSIONS = set(['csv'])
+ALLOWED_EXTENSIONS = set(['csv', 'txt'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -56,7 +56,7 @@ def get_word_scores():
                 return send_file(path + "/result_words.csv", mimetype="text/csv",
                                  attachment_filename='result_words.csv', as_attachment=True), 200
             return Response('Only .csv files are allowed.'), 400
-        return Response('Two files are required'), 400
+        return Response('Two files are required.'), 400
     return redirect(url_for('render_word_scores'))
 
 
@@ -67,9 +67,33 @@ def render_prediction():
 
 @app.route('/get_prediction', methods=['GET', 'POST'])
 def get_prediction():
-    # get prediction from existing model
     if request.method == 'POST':
-        return
+        f = request.files.getlist('file')
+        if len(f) == 3:
+            if allowed_file(f[0].filename) and allowed_file(f[1].filename) and allowed_file(f[2].filename):
+                if not os.path.exists(app.config['UPLOAD_FOLDER'] + request.remote_addr):
+                    os.mkdir(app.config['UPLOAD_FOLDER'] + request.remote_addr)
+                path = app.config['UPLOAD_FOLDER'] + request.remote_addr
+                secured_filenames = []
+                for file in f:
+                    filename = secure_filename(file.filename)
+                    secured_filenames.append(filename)
+                    file.save(path + "/" + filename)
+                try:
+                    compute_prediction(path + "/" + secured_filenames[0], path + "/" + secured_filenames[1],
+                                       path + "/" + secured_filenames[2], path + "/result_prediction.txt")
+                except Exception:
+                    os.remove(path + "/" + secured_filenames[0])
+                    os.remove(path + "/" + secured_filenames[1])
+                    os.remove(path + "/" + secured_filenames[2])
+                    return Response("File does not have required structure"), 400
+                os.remove(path + "/" + secured_filenames[0])
+                os.remove(path + "/" + secured_filenames[1])
+                os.remove(path + "/" + secured_filenames[2])
+                return send_file(path + "/result_prediction.txt", mimetype="text/plain",
+                                 attachment_filename='result_prediction.txt', as_attachment=True), 200
+            return Response("Only .txt and .csv files are allowed."), 400
+        return Response("Three files are required."), 400
     return redirect(url_for('render_prediction'))
 
 
