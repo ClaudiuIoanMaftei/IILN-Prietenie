@@ -22,4 +22,4 @@ def compute_tokens_and_lemmas(input_file, output_token_file, output_lemmas_file)
 
 
 if __name__ == '__main__':
-    compute_tokens_and_lemmas(input_file="Data/agr_en_dev.csv", output_token_file="Outputs/tokens.csv", output_lemmas_file="Outputs/lemmas.csv")
+    compute_tokens_and_lemmas(input_file="../test/input.txt", output_token_file="../test/test_tokens.csv", output_lemmas_file="../test/test_lemmas.csv")

@@ -47,7 +47,8 @@ def get_word_scores():
                 try:
                     compute_word_scores(path + "/" + secured_filenames[0], path + "/" + secured_filenames[1],
                                         path + "/result_words.csv")
-                except Exception:
+                except Exception as e:
+                    print(e)
                     os.remove(path + "/" + secured_filenames[0])
                     os.remove(path + "/" + secured_filenames[1])
                     return Response("File does not have required structure"), 400
@@ -82,14 +83,15 @@ def get_prediction():
                 try:
                     compute_prediction(path + "/" + secured_filenames[0], path + "/" + secured_filenames[1],
                                        path + "/" + secured_filenames[2], path + "/result_prediction.txt")
-                except Exception:
-                    os.remove(path + "/" + secured_filenames[0])
-                    os.remove(path + "/" + secured_filenames[1])
-                    os.remove(path + "/" + secured_filenames[2])
+                except Exception as e:
+                    print(e)
+                    # os.remove(path + "/" + secured_filenames[0])
+                    # os.remove(path + "/" + secured_filenames[1])
+                    # os.remove(path + "/" + secured_filenames[2])
                     return Response("File does not have required structure"), 400
-                os.remove(path + "/" + secured_filenames[0])
-                os.remove(path + "/" + secured_filenames[1])
-                os.remove(path + "/" + secured_filenames[2])
+                # os.remove(path + "/" + secured_filenames[0])
+                # os.remove(path + "/" + secured_filenames[1])
+                # os.remove(path + "/" + secured_filenames[2])
                 return send_file(path + "/result_prediction.txt", mimetype="text/plain",
                                  attachment_filename='result_prediction.txt', as_attachment=True), 200
             return Response("Only .txt and .csv files are allowed."), 400
@@ -114,7 +116,8 @@ def get_punctuation():
             f.save(path + "/" + filename)
             try:
                 compute_punctuation(path + "/" + filename, path + "/result_punctuation.csv")
-            except Exception:
+            except Exception as e:
+                print(e)
                 os.remove(path + "/" + filename)
                 return Response("File does not have required structure"), 400
             os.remove(path + "/" + filename)
@@ -140,7 +143,8 @@ def get_sentiments():
             f.save(path + "/" + filename)
             try:
                 compute_sentiments(path + "/" + filename, path + "/result_sentiments.csv")
-            except Exception:
+            except Exception as e:
+                print(e)
                 os.remove(path + "/" + filename)
                 return "File does not have required structure", 400
             os.remove(path + "/" + filename)
@@ -167,7 +171,8 @@ def get_tokens_lemmas():
             try:
                 compute_tokens_and_lemmas(path + "/" + filename, path + "/result_tokens.csv",
                                           path + "/result_lemmas.csv")
-            except Exception:
+            except Exception as e:
+                print(e)
                 os.remove(path + "/" + filename)
                 return "File does not have required structure", 400
             with zipfile.ZipFile(path + '/tokens_lemmas_results.zip', 'w') as myzip:
@@ -197,7 +202,8 @@ def get_upper_lower():
             f.save(path + "/" + filename)
             try:
                 compute_upper_lower(path + "/" + filename, path + "/result_upper_lower_scores.csv")
-            except Exception:
+            except Exception as e:
+                print(e)
                 os.remove(path + "/" + filename)
                 return "File does not have required structure", 400
             os.remove(path + "/" + filename)

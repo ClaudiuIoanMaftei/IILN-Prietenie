@@ -86,5 +86,7 @@ def compute_word_scores(input_data, input_lemmas, output_word_scores):
 
 
 if __name__ == '__main__':
-    compute_word_scores(input_data="Data/agr_en_train.csv", input_lemmas="Outputs/lemmas.csv",
-                        output_word_scores="Outputs/word_scores.csv")
+    compute_word_scores(input_data="../../Project/Data/agr_en_train.csv", input_lemmas="../../Project/Outputs/lemmas.csv",
+                        output_word_scores="../test/test_word_scores.csv")
+    # compute_word_scores(input_data="../test/input.txt", input_lemmas="../test/test_lemmas.csv",
+    #                     output_word_scores="../test/test_word_scores.csv")
